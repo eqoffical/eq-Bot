@@ -26,72 +26,76 @@ async def on_message(message):
 
     if message.channel.name == 'bot-spam':
         if user_message.lower() == 'hello':
+    
             await message.channel.send(f'Hello {username} 👋')
+        
         elif user_message.lower() == 'ping':
-            await message.channel.send(f'Pong!! {username} 🏓')
-        elif user_message.lower() == '!rnumber':
-            response = f'Kinda {random.randrange(100)} 🤔'
-            await message.channel.send(response)
-            return
+    
+            await message.channel.send(f'Pong {username}!! 🏓')
+        
+        elif user_message.lower().startswith('!rnumber'):
+            try:
+                limit = user_message.split(' ')[1] 
 
+                try:
+                    limit = int(limit)
+            
+                    if limit <= 0:
+                        response = "Number must be positive 🥺"
+            
+                    else:
+                        response = f"Let it be: {random.randint(1, limit)} 🎲"
+            
+                except ValueError:
+                    response = "I dunno bruh 🤨"
+            
+                await message.channel.send(response)
+        
+            except:
+                response = f"Uhm, let it be: {random.randint(1_000_000, 9_999999)}, hope it's good for you 👀"
+    
+                await message.channel.send(response)
+                return
+'''
 # Music-bot Part
+ytdl_opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+}
 
+@client.event
+async def on_ready():
+    print(f"Bot logged in as {client.user}")
 
-    # Check if the message author is not a bot
-    if message.author.bot:
+@client.event
+async def on_message(message):
+    if message.author == client.user:
         return
 
-    # Check if the message has a valid command
-    if message.content.startswith('play'):
-        command = message.content.split(' ')
-        if len(command) > 1:
-            url = command[1]
-            voice_channel = message.author.voice.channel
+    if message.content.lower().startswith('play'):
+        url = message.content.split(' ')[1]
+        voice_channel = message.author.voice.channel
 
-            # Connect to the voice channel
+        try:
             voice_client = await voice_channel.connect()
+        except discord.errors.ClientException:
+            voice_client = message.guild.voice_client
 
-            # Download the audio from the YouTube video
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'noplaylist': True,
-            }
-
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=False)
-                url2 = info['formats'][0]['url']
-
-            # Play the audio in the voice channel
+        with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
+            info = ytdl.extract_info(url, download=False)
+            url2 = info['formats'][0]['url']
+            voice_client.stop()
             voice_client.play(discord.FFmpegPCMAudio(url2))
 
-            # Leave the voice channel after the audio finishes playing
-            def after_playing(error):
-                asyncio.run_coroutine_threadsafe(voice_client.disconnect(), client.loop)
-
-            voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
-            voice_client.source.volume = 0.5  # Adjust the volume if needed
-            voice_client.source.after = after_playing
-
-    elif message.content == 'leave':
-        # Check if the message is the 'leave' command
-        voice_client = discord.utils.get(client.voice_clients, guild=message.guild)
-
-        if voice_client and voice_client.is_connected():
+    if message.content.lower().startswith('stop'):
+        voice_client = message.guild.voice_client
+        if voice_client and voice_client.is_playing():
+            voice_client.stop()
             await voice_client.disconnect()
-
-
-
-
-
-
-
-
-
-
+'''
 
 client.run(token)
