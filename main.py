@@ -39,7 +39,7 @@ async def on_message(message):
         
         # Generate Random Number
 
-        elif user_message.lower().startswith('!rnumber'):
+        elif user_message.lower().startswith('rnumber'):
             try:
                 limit = user_message.split(' ')[1] 
 
@@ -58,7 +58,7 @@ async def on_message(message):
                 await message.channel.send(response)
         
             except:
-                response = f"Uhm, let it be: {random.randint(1_000_000, 9_999999)}, hope it's good for you 👀"
+                response = f"Uhm, let it be: {random.randint(1_000_000, 9_999_999)}, hope it's good for you 👀"
     
                 await message.channel.send(response)
                 return
