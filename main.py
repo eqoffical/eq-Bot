@@ -26,40 +26,34 @@ async def on_message(message):
 
     if message.channel.name == chat:
         
-# Hello
-
-        if user_message.lower() == 'hello':
-    
-            await message.channel.send(f'Hello {username} 👋')
-        
 # Ping 
 
-        elif user_message.lower() == 'ping':
+        if user_message.lower() == 'пинг':
     
-            await message.channel.send(f'Pong {username}!! 🏓')
+            await message.channel.send(f'Понг {username}!! 🏓')
         
 # Generate Random Number
 
-        elif user_message.lower().startswith('rnumber'):
+        elif user_message.lower().startswith('рандомчисло'):
             try:
-                limit = user_message.split(' ')[1] 
+                limit = user_message.split(' ')[1]
 
                 try:
                     limit = int(limit)
             
                     if limit <= 0:
-                        response = "Number must be positive 🥺"
+                        response = "Число должно быть положительным 🥺"
             
                     else:
-                        response = f"Let it be: {random.randint(1, limit)} 🎲"
+                        response = f"Пусть будет: {random.randint(1, limit)} 🎲"
             
                 except ValueError:
-                    response = "I dunno bruh 🤨"
+                    response = "Я не знаю 🤨"
             
                 await message.channel.send(response)
         
             except:
-                response = f"Uhm, let it be: {random.randint(1_000_000, 9_999_999)}, hope it's good for you 👀"
+                response = f"Хмм, пусть будет: {random.randint(1_000_000, 9_999_999)}, надеюсь это вам поможет 👀"
     
                 await message.channel.send(response)
                 return
