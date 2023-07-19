@@ -36,18 +36,20 @@ async def on_message(message):
 
         elif user_message.lower().startswith('рандомчисло'):
             try:
-                limit = user_message.split(' ')[1]
+                user_limit = user_message.split(' ')[1]
+                    
+                limit = int(user_limit)
 
-                try:
-                    limit = int(limit)
-            
-                    if limit <= 0:
-                        response = "Число должно быть положительным 🥺"
-            
-                    else:
-                        response = f"Пусть будет: {random.randint(1, limit)} 🎲"
-            
-                except ValueError:
+                if limit <= 0:
+                    response = "Число должно быть положительным 🥺"
+        
+                elif limit >= 2:
+                    response = f"Пусть будет: {random.randint(1, int(user_limit))} 🎲"
+                                    
+                elif limit == 1:
+                    response = f"Случайное число от 1 до 1 является 1! 🎲"
+
+                else:
                     response = "Я не знаю 🤨"
             
                 await message.channel.send(response)
@@ -60,8 +62,8 @@ async def on_message(message):
 
 # Roles
 
-        elif user_message.lower() == '!roles':
-            role_list = ["💰 GTA V", "💠 Genshin Impact", "🚀 Among us", "💀 Fortnite", "🕹 Roblox", "🚗 Rocket League", "😱 Phasmophobia", "🌳 Terraria", "⛏ Minecraft", "🎯 CS:GO", "🍖 Don't Starve Together", "🏎 Forza Horizon 4"]
+        elif user_message.lower() == 'роли':
+            role_list = ["\n💰 GTA V", "💠 Genshin Impact", "🚀 Among us", "💀 Fortnite", "🕹 Roblox", "🚗 Rocket League", "😱 Phasmophobia", "🌳 Terraria", "⛏ Minecraft", "🎯 CS:GO", "🍖 Don't Starve Together", "🏎 Forza Horizon 4", "☣ Left 4 Dead 2", "\n🎮 Game Dev", "💻 Dev"]
 
             # Create a formatted message with the role options
             roles_message = "Все доступные роли:\n"
@@ -70,10 +72,10 @@ async def on_message(message):
 
             sent_message = await message.channel.send(roles_message)
 
-        elif user_message.lower() in ["💰", "💠", "🚀", "💀", "🕹", "🚗", "😱", "🌳", "⛏", "🎯", "🍖", "🏎"]:
-            role_emojis = ["💰", "💠", "🚀", "💀", "🕹", "🚗", "😱", "🌳", "⛏", "🎯", "🍖", "🏎"]
+        elif user_message.lower() in ["💰", "💠", "🚀", "💀", "🕹", "🚗", "😱", "🌳", "⛏", "🎯", "🍖", "🏎", "☣️", "🎮", "💻"]:
+            role_emojis = ["💰", "💠", "🚀", "💀", "🕹", "🚗", "😱", "🌳", "⛏", "🎯", "🍖", "🏎", "☣️", "🎮", "💻"]
             role_index = role_emojis.index(user_message)
-            role_list = ["GTA V", "Genshin Impact", "Among us", "Fortnite", "Roblox", "Rocket League", "Phasmophobia", "Terraria", "Minecraft", "CS:GO", "Don't Starve Together", "Forza Horizon 4"]
+            role_list = ["GTA V", "Genshin Impact", "Among us", "Fortnite", "Roblox", "Rocket League", "Phasmophobia", "Terraria", "Minecraft", "CS:GO", "Don't Starve Together", "Forza Horizon 4", "Left 4 Dead 2", "Game Dev", "Dev"]
 
             if role_index >= 0 and role_index < len(role_list):
                 role_name = role_list[role_index]
